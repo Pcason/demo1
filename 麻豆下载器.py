@@ -1,6 +1,7 @@
 # coding:utf-8
 # -*- coding: utf-8 -*-
-
+#账号：cason
+#密码：123456
 # Form implementation generated from reading ui file 'video.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
