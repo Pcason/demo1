@@ -1,8 +1,8 @@
 # coding:utf-8
 import os
-
 import requests
 import json
+import notify
 
 
 def get_points(authorization):
@@ -43,11 +43,10 @@ def get_quests(authorization):
                       r.json().get('data').get('quest').get('score'))
         if n == 30:
             break
-        else:
-            n = 0
 
 
 def main():
+    content = ''
     token_list = os.getenv('ZSOH').split('@')
     for token in token_list:
         mobile, points = get_points(token)
@@ -57,7 +56,8 @@ def main():
             print(f'用户{mobile}的积分:{points}')
         get_quests(token)
         mobile, points = get_points(token)
-        print(f'用户{mobile}的积分:{points}')
+        content = content + f'用户{mobile}的积分:{points}\n'
+    notify.pushplus_bot('掌上瓯海', content)
 
 
 if __name__ == '__main__':
