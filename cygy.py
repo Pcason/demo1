@@ -3,6 +3,7 @@
 项目名称：成语果园微信小程序
 抓包tree-prod.graylog.chimps.cn域名下请求头Authorization值，填写到环境变量cygy里，多账号换行隔开
 支持青龙面板，每天2~3次
+作者：cason
 """
 import os
 import requests
