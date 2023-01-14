@@ -1,8 +1,11 @@
 # coding:utf-8
+"""
+项目名称：成语果园微信小程序
+抓包tree-prod.graylog.chimps.cn域名下请求头Authorization值，填写到环境变量cygy里，多账号换行隔开
+支持青龙面板，每天2~3次
+"""
 import os
-
 import requests
-
 import notify
 
 
@@ -304,6 +307,7 @@ def main():
         answer(token)
         watering(token)
         water, energy, nutrient, fruit, fertilizer = get_details(token)
+        print(f'=======开始账号[{num}]========')
         print(f'账号[{num}]当前水滴数量: ', water)
         print(f'账号[{num}]当前体力值: ', energy)
         print(f'账号[{num}]当前养分: ', nutrient)
