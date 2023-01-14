@@ -2,7 +2,7 @@
 """
 项目名称：掌上瓯海APP
 抓包newsapi.wzrb.com.cn域名下请求头Authorization的值，取Bearer 后面的部分
-青龙环境变量ZSOH，多账号换行隔开
+环境变量ZSOH，多账号换行隔开
 作者：cason
 项目地址：https://github.com/Pcason/demo1/blob/main/zsoh.py
 """
@@ -13,6 +13,11 @@ import notify
 
 
 def get_points(authorization):
+    '''
+    查询手机号和积分信息
+    :param authorization: 
+    :return: 
+    '''
     url = 'https://newsapi.wzrb.com.cn/api/Users/Info'
     headers = {
         'Accept-Encoding': 'gzip, deflate, br',
@@ -29,6 +34,11 @@ def get_points(authorization):
 
 
 def get_quests(authorization):
+    '''
+    做任务
+    :param authorization: 
+    :return: 
+    '''
     url = 'https://newsapi.wzrb.com.cn/api/users/completed-quests'
     headers = {
         'Accept': '*/*',
