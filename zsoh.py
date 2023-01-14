@@ -2,7 +2,7 @@
 """
 项目名称：掌上瓯海APP
 抓包newsapi.wzrb.com.cn域名下请求头Authorization的值，取Bearer 后面的部分
-环境变量ZSOH，多账号换行隔开
+青龙环境变量ZSOH，多账号换行隔开
 作者：cason
 项目地址：https://github.com/Pcason/demo1/blob/main/zsoh.py
 """
