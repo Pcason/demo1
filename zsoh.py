@@ -54,7 +54,7 @@ def get_quests(authorization):
 
 def main():
     content = ''
-    token_list = os.getenv('ZSOH').split('@')
+    token_list = os.getenv('ZSOH').split('\n')
     for token in token_list:
         mobile, points = get_points(token)
         if mobile == '':
