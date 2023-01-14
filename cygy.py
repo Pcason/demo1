@@ -4,6 +4,7 @@
 抓包tree-prod.graylog.chimps.cn域名下请求头Authorization值，填写到环境变量cygy里，多账号换行隔开
 支持青龙面板，每天2~3次
 作者：cason
+项目地址：https://github.com/Pcason/demo1/blob/main/cygy.py
 """
 import os
 import requests
