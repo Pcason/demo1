@@ -1,4 +1,11 @@
 # coding:utf-8
+"""
+项目名称：悦马星空APP
+抓包appapi.changan-mazda.com.cn域名下appapi.changan-mazda.com.cn值，只要Bearer 后面的部分。
+青龙环境变量ymsk，多账号换行隔开
+作者：cason
+项目地址：https://github.com/Pcason/demo1/blob/main/ymsk.py
+"""
 import json
 import os
 import notify
@@ -84,7 +91,7 @@ def signin(token, userid):
 
 def main():
     content = ''
-    token_list = os.getenv('ymsk').split('@')
+    token_list = os.getenv('ymsk').split('\n')
     print('=====检测到'+str(len(token_list))+'个账号======')
     for token in token_list:
         userid, memberid, username = get_userid(token)
