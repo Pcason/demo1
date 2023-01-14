@@ -51,6 +51,7 @@ class LoginThread(QThread):
             time.sleep(1)
 
 
+            
 class MyWindow(QDialog):
     login_status = pyqtSignal(str)
     login_text = pyqtSignal(str)
