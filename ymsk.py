@@ -1,7 +1,7 @@
 # coding:utf-8
 """
 项目名称：悦马星空APP
-抓包appapi.changan-mazda.com.cn域名下appapi.changan-mazda.com.cn值，只要Bearer 后面的部分。
+抓包appapi.changan-mazda.com.cn域名下Authorization值，只要Bearer 后面的部分。
 青龙环境变量ymsk，多账号换行隔开
 作者：cason
 项目地址：https://github.com/Pcason/demo1/blob/main/ymsk.py
@@ -13,6 +13,12 @@ import requests
 
 
 def get_point(token, memberid):
+    '''
+    查询积分值
+    :param token: 
+    :param memberid: 
+    :return: 
+    '''
     url = 'https://appapi.changan-mazda.com.cn/api-user/point/getUserPointInfo'
     headers = {
         'Authorization': 'Bearer ' + token,
@@ -24,6 +30,11 @@ def get_point(token, memberid):
 
 
 def send_releaseCount(token):
+    '''
+    发布文章
+    :param token: 
+    :return: 
+    '''
     url = 'https://appapi.changan-mazda.com.cn/api-content/dynamic/publishDynamic'
     headers = {
         'Authorization': 'Bearer ' + token,
@@ -37,12 +48,22 @@ def send_releaseCount(token):
 
 
 def releaseCount_total(userid):
+    '''
+    统计已发布文章总数
+    :param userid: 
+    :return: 
+    '''
     url = 'https://appapi.changan-mazda.com.cn/api-user/user/focus/focusAndFansCount?userId=' + userid
     r = requests.get(url)
     return r.json().get('data').get('releaseCount')
 
 
 def send_comment(token):
+    '''
+    发布评论
+    :param token: 
+    :return: 响应码
+    '''
     url = 'https://appapi.changan-mazda.com.cn/api-content/comment/addComment'
     headers = {
         'Authorization': 'Bearer ' + token,
@@ -56,29 +77,27 @@ def send_comment(token):
     return r.json().get('code')
 
 
-# def login(phone):
-#     login_url = 'https://appapi.changan-mazda.com.cn/api-sms/sms/sendVerificationCode'
-#     data = json.dumps({"phone": phone, "type": "temp01"})
-#     headers = {'Content-Type': 'application/json', 'client_id': 'app', 'client_secret': 'app'}
-#     login_res = requests.post(login_url, data=data, headers=headers)
-#     print(login_res.json().get('data'))
-#     code = input('验证码:')
-#     token_url = 'https://appapi.changan-mazda.com.cn/api-auth/oauth/sms/token'
-#     token_data = json.dumps({"validateCode": code, "mobile": phone})
-#     token_res = requests.post(token_url, data=token_data, headers=headers)
-#     return token_res.json().get('data').get('access_token')
-
-
 def get_userid(token):
+    '''
+    获取用户基本信息
+    :param token: 
+    :return: 用户id，memberId，memberId
+    '''
     url = 'https://appapi.changan-mazda.com.cn/api-auth/oauth/current/user'
     headers = {
         'Authorization': 'Bearer ' + token
     }
     r = requests.get(url, headers=headers)
-    return r.json().get('data').get('id'), r.json().get('data').get('memberId'), r.json().get('data').get('username')
+    return r.json().get('data').get('id'), r.json().get('data').get('memberId'), r.json().get('data').get('memberId')
 
 
 def signin(token, userid):
+    '''
+    签到
+    :param token: 
+    :param userid: 
+    :return: 
+    '''
     url = 'https://appapi.changan-mazda.com.cn/api-user/user/signin'
     headers = {
         'Authorization': 'Bearer ' + token,
@@ -92,6 +111,7 @@ def signin(token, userid):
 def main():
     content = ''
     token_list = os.getenv('ymsk').split('\n')
+    # token_list=['8e3a0f1f-2f73-45f2-aaf3-eaa8076717c4']
     print('=====检测到'+str(len(token_list))+'个账号======')
     for token in token_list:
         userid, memberid, username = get_userid(token)
