@@ -14,7 +14,7 @@ import notify
 def get_details(token):
     """
     获取详情基本信息
-    :param token: 
+    :param token:
     :return: 水滴，体力，养分，果实，肥料
     """
     url = 'https://tree-prod.graylog.chimps.cn/player/re-enter'
@@ -34,8 +34,8 @@ def get_details(token):
 def sign_roll(token):
     """
     每日抽奖
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/sign-roll/roll'
     headers = {
@@ -69,8 +69,8 @@ def sign_roll(token):
 def daily_tasks(token):
     """
     日常任务
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/free/reward'
     headers = {
@@ -116,8 +116,8 @@ def daily_tasks(token):
 def play_video(token):
     """
     看视频得水滴
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/player/add-reward'
     headers = {
@@ -140,8 +140,8 @@ def play_video(token):
 def reward_share_friend(token):
     """
     分享得水滴
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/free/reward-share-friend'
     headers = {
@@ -163,8 +163,8 @@ def reward_share_friend(token):
 def share_friend_big(token):
     """
     分享得水滴礼包
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/free/reward-share-friend-big'
     headers = {
@@ -191,31 +191,41 @@ def share_friend_big(token):
 def add_rewards(token):
     """
     水滴福利
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/player/add-reward'
     headers = {
         'Authorization': token
     }
-    data = {
-        'reason': 'rewardBalloon'
-    }
-    while True:
-        r = requests.post(url, data=data, headers=headers)
-        errcode = r.json().get('errcode')
-        if errcode == 40002:
-            print(r.json().get('errmsg'))
-            break
-        else:
-            print('获得水滴: 10')
+    data_list = [
+        {
+            'reason': 'rewardBalloon'
+        },
+        {
+            'reason': 'redPack'
+        },
+        {
+            'reason': 'dailyEnergyByVideo',
+            'rewardType': 'share'
+        }
+    ]
+    for data in data_list:
+        while True:
+            r = requests.post(url, data=data, headers=headers)
+            errcode = r.json().get('errcode')
+            if errcode == 40002:
+                print(r.json().get('errmsg'))
+                break
+            else:
+                print('领取成功')
 
 
 def answer(token):
     """
     成语闯关
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     while True:
         answer_url = 'https://tree-prod.graylog.chimps.cn/player/unlock'
@@ -240,8 +250,8 @@ def answer(token):
 def watering(token):
     """
     浇水
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     while True:
         url = 'https://tree-prod.graylog.chimps.cn/tree/water'
@@ -271,8 +281,8 @@ def watering(token):
 def fertilizer(token):
     """
     获取肥料
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/player/add-reward'
     headers = {
@@ -293,8 +303,8 @@ def fertilizer(token):
 def use_fertilizer(token):
     """
     施肥
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/tree/use-fertilizer'
     headers = {
@@ -316,8 +326,8 @@ def use_fertilizer(token):
 def got_fruit(token):
     """
     摘果实
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/tree/got-fruit'
     headers = {
@@ -343,8 +353,8 @@ def got_fruit(token):
 def sowing(token):
     """
     播种
-    :param token: 
-    :return: 
+    :param token:
+    :return:
     """
     url = 'https://tree-prod.graylog.chimps.cn/tree/sowing'
     headers = {
@@ -361,16 +371,54 @@ def sowing(token):
         print('播种成功')
 
 
+def got_storage_water(token):
+    """
+    领取蓄水壶水滴
+    :param token:
+    :return:
+    """
+    url = 'https://tree-prod.graylog.chimps.cn/tree/got-storage-water'
+    headers = {
+        'Authorization': token
+    }
+    r = requests.post(url, data={}, headers=headers)
+    errcode = r.json().get('errcode')
+    if errcode == 40002:
+        print(r.json().get('errmsg'))
+    else:
+        print('领取水滴: ', r.json().get('data').get('water'))
+
+
+def jigsaw(token):
+    """
+    集字换礼
+    :param token:
+    :return:
+    """
+    url = 'https://tree-prod.graylog.chimps.cn/jigsaw/reward'
+    headers = {
+        'Authorization': token
+    }
+    r = requests.post(url, data={}, headers=headers)
+    errcode = r.json().get('errcode')
+    if errcode == 40002:
+        print(r.json().get('errmsg'))
+    else:
+        print('集字换礼领取成功: ')
+
+
 def main():
     content = ''
     token_list = os.getenv('cygy').split('\n')
     for num, token in enumerate(token_list):
         num = num + 1
+        got_storage_water(token)
         sign_roll(token)
         daily_tasks(token)
         play_video(token)
         reward_share_friend(token)
         share_friend_big(token)
+        jigsaw(token)
         add_rewards(token)
         answer(token)
         watering(token)
