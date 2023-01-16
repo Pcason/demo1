@@ -412,6 +412,7 @@ def main():
     token_list = os.getenv('cygy').split('\n')
     for num, token in enumerate(token_list):
         num = num + 1
+        print(f'=======开始账号[{num}]========')
         got_storage_water(token)
         sign_roll(token)
         daily_tasks(token)
@@ -422,8 +423,7 @@ def main():
         add_rewards(token)
         answer(token)
         watering(token)
-        water, energy, nutrient, fruit, fertilizer = get_details(token)
-        print(f'=======开始账号[{num}]========')
+        water, energy, nutrient, fruit, fertilizer = get_details(token)     
         print(f'账号[{num}]当前水滴数量: ', water)
         print(f'账号[{num}]当前体力值: ', energy)
         print(f'账号[{num}]当前养分: ', nutrient)
