@@ -7,6 +7,7 @@
 作者：cason
 项目地址：https://github.com/Pcason/demo1/blob/main/zxtn.py
 """
+import json
 import os
 import requests
 import notify
@@ -42,9 +43,9 @@ def login(phone):
         exit()
 
 
-def praise(token):
+def praise(token, informationId_list):
     url = 'https://h5.cqliving.com//info/doPraise.html'
-    for i in range(5298670, 5298680):
+    for i in informationId_list:
         data = {
             'appId': '37',
             'sourceId': str(i),
@@ -162,17 +163,52 @@ def point_info(token):
         print("查询积分失败", res.json().get('message'))
 
 
+def news(token):
+    informationId_list = []
+    url = 'https://api.cqliving.com/info/news.html'
+    try:
+        with open('掌心潼南.json', 'r', encoding='utf-8') as f1:
+            last_dict = json.loads(f1.read())
+    except:
+        last_dict = {"id": "2626924", "sortNo": "554601385234"}
+    data = {
+        'appId': '37',
+        'isCarousel': 'true',
+        'columnId': '331',
+        'lastId': last_dict.get('id'),
+        'lastSortNo': last_dict.get('sortNo'),
+        'sessionId': '6df56b8ccb2e4935a225a6d4ffb8da85',
+        'token': token
+    }
+    res = requests.post(url, data=data, headers=headers)
+    if res.json().get('code') == 0:
+        news_list = res.json().get('data').get('news')
+        for num, news in enumerate(news_list):
+            informationId = news.get('informationId')
+            informationId_list.append(informationId)
+            if num == 9:
+                id = news.get('id')
+                sortNo = news.get('sortNo')
+                with open('掌心潼南.json', 'w', encoding='utf-8') as f:
+                    f.write(json.dumps({'id': str(id), 'sortNo': str(sortNo)}))
+        return informationId_list
+    else:
+        print("查询新闻列表失败", res.json().get('message'))
+        exit()
+
+
 def main():
     content = ''
     phone_list = os.getenv('zxtn').split('\n')
     print('=====检测到' + str(len(phone_list)) + '个账号======')
     for num, phone in enumerate(phone_list):
+        num = num + 1
         print(f'=======开始账号[{num}]========')
-        num += 1
         token = login(phone)
         sign(token)
+        informationId_list = news(token)
         reading(token)
-        praise(token)
+        praise(token, informationId_list)
         comment(token)
         share(token)
         currentPoint = point_info(token)
@@ -182,4 +218,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except:
+        main()
