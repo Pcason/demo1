@@ -162,12 +162,10 @@ class Fruit:
 def main():
     content = ''
     token_list = os.getenv('dsgck').split('\n')
-    # token_list = ['']
     print('=====检测到' + str(len(token_list)) + '个账号======')
     for num,token in enumerate(token_list):
         num += 1
         print(f'\n=======开始账号【{num}】========\n')
-        # token='oxr9uhUQtGDQm9/aw0SHFw9qb4X7CyXejNd8W7srOYjCFqkUDq+yLfSeyHkWqF95iYikifWaLbTghB15BGfRTt6g4nUNjY4X2uVrTT8i+3cji58TDZXcB/iMlAHAuBIZjQPBI+HJXJImalx2j/kCyDI5w7qM7b6L08PWKyPGK3Ykox0aWCcjc+C4mS/D7L/HTM5qGt3s6l6Lhtpw8mT6npyx9Q4i3L0FuYIhbVYq9ZggtJI9tB7iqVHReYlR0fj5ts4ZIWDoB1pKzpV+mSzXVXGjK6RyCZnUx3+9uOllD911olCCHjUr4RfzjdW+/kbAoqt3bfYw0evHnPhpvXDJTA=='
         fruit = Fruit(token)
         fruit.get_info()
         for i in range(50):
