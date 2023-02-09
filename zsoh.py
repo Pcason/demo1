@@ -15,8 +15,8 @@ import notify
 def get_points(authorization):
     '''
     查询手机号和积分信息
-    :param authorization: 
-    :return: 
+    :param authorization:
+    :return:
     '''
     url = 'https://newsapi.wzrb.com.cn/api/Users/Info'
     headers = {
@@ -36,8 +36,8 @@ def get_points(authorization):
 def get_quests(authorization):
     '''
     做任务
-    :param authorization: 
-    :return: 
+    :param authorization:
+    :return:
     '''
     url = 'https://newsapi.wzrb.com.cn/api/users/completed-quests'
     headers = {
@@ -49,22 +49,22 @@ def get_quests(authorization):
     }
     while True:
         n = 0
-        for id in range(1, 31):
+        for id in range(11, 31):
             data = json.dumps({"questId": id})
             r = requests.post(url, data=data, headers=headers)
             if r.json().get('status') != 200:
                 print(id, r.json().get('msg'))
                 n += 1
             else:
-                print(id, r.json().get('data').get('quest').get('name'), '获得积分',
-                      r.json().get('data').get('quest').get('score'))
-        if n == 30:
+                print(id, '获得积分:', r.json().get('data').get('points'))
+        if n == 20:
             break
 
 
 def main():
     content = ''
-    token_list = os.getenv('ZSOH').split('\n')
+    # token_list = os.getenv('ZSOH').split('\n')
+    token_list = ['0F715842F74CDE7E0F561B766603D951']
     for token in token_list:
         mobile, points = get_points(token)
         if mobile == '':
