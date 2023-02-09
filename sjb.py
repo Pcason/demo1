@@ -7,12 +7,13 @@ import notify
 
 
 class SleepBody:
-    def __init__(self, ua):
+    def __init__(self, ua, equipmentCode):
         self.headers = {
             'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 7.1.2; M2012K11AC Build/N6F26Q)',
             'ua': ua
         }
         self.now_time = int(time.strftime('%H', time.localtime(time.time())))
+        self.equipmentCode = equipmentCode
 
     def login(self):
         url = 'https://mapi.shuijiaobao.cn/login/code'
@@ -20,12 +21,16 @@ class SleepBody:
             "versionName": "2.0.5",
             "pName": "ql_sleep",
             "channel": "sl_ali",
-            "userId": "920404"
+            "equipmentCode": self.equipmentCode
         }
         r = requests.post(url, headers=self.headers, data=data)
         if r.json().get('msg') == '成功':
             user_name = r.json().get('data').get('userInfo').get('name')
             token = r.json().get('data').get('userInfo').get('accessToken')
+            old_ua = self.headers.get('ua').split("|")
+            old_ua[-2] = token
+            new_ua = '|'.join(old_ua)
+            self.headers['ua'] = new_ua
             return user_name, token
         else:
             print(r.json().get('msg'))
@@ -34,7 +39,10 @@ class SleepBody:
         if self.now_time in [7, 8, 9]:
             url = 'https://mapi.shuijiaobao.cn/home/sign'
             r = requests.post(url, headers=self.headers)
-            print(r.json())
+            if r.json().get('msg') == '成功':
+                print('签到成功')
+            else:
+                print('签到失败：', r.json().get('msg'))
         else:
             print('今日已签到')
 
@@ -64,12 +72,12 @@ class SleepBody:
 
     def feed(self):
         url = 'https://mapi.shuijiaobao.cn/sleep/dinnerCreate'
-        r = requests.post(url, self.headers)
+        r = requests.post(url, headers=self.headers)
         if self.now_time in [7, 8, 9, 12, 13, 14, 17, 18, 20, 21, 22]:
             if r.json().get('msg') == '成功':
                 print('吃饭领取金币：', r.json().get('data').get('gold_number'))
             else:
-                print(r.json().get('msg'))
+                print('吃饭金币领取失败: ', r.json().get('msg'))
         else:
             print('未到吃饭时间。')
 
@@ -78,14 +86,25 @@ class SleepBody:
         data = {
             'type': '155'
         }
-        if self.now_time in [7, 8, 9]:
+        if self.now_time in [7, 8, 9, 21]:
+            if self.now_time == 21:
+                r = requests.post(url, data={'type': '152'}, headers=self.headers)
+                if r.json().get('msg') == '成功':
+                    print('领取金币：', r.json().get('data').get('user_info').get('add_gold_coin'))
+                else:
+                    print(r.json().get('msg'))
+                res = requests.post(url, data={'type': '153'}, headers=self.headers)
+                if res.json().get('msg') == '成功':
+                    print('领取金币：', res.json().get('data').get('user_info').get('add_gold_coin'))
+                else:
+                    print(res.json().get('msg'))
             for i in range(1, 9):
                 r = requests.post(url, headers=self.headers, data=data)
                 if r.json().get('msg') == '成功':
                     print(f'第{i}次看视频领取金币：', r.json().get('data').get('user_info').get('add_gold_coin'))
                 else:
                     print(r.json().get('msg'))
-                time.sleep(random.randint(10, 15) + random.random())
+                # time.sleep(random.randint(10, 15) + random.random())
         else:
             print('今日已观看视频')
 
@@ -103,15 +122,16 @@ class SleepBody:
 def main():
     content = ''
     ua_list = os.getenv('sjbck').split('\n')
-    print(ua_list)
     print('=====检测到' + str(len(ua_list)) + '个账号======')
     for ua in ua_list:
-        sleep_body = SleepBody(ua)
+        equipmentCode = ua.split('|')[4]
+        sleep_body = SleepBody(ua, equipmentCode)
         user_name, token = sleep_body.login()
         print(f'\n=======开始账号【{user_name}】========\n')
+        print(f'{user_name}登陆成功')
         sleep_body.sign()
-        sleep_body.sleep()
         sleep_body.feed()
+        sleep_body.sleep()
         sleep_body.view_video()
         gold = sleep_body.user_gold()
         print('当前账户积分：', gold)
