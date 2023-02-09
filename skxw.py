@@ -67,12 +67,14 @@ def get_point(userid):
                     print(r.json().get('data').get('pointName'), '获得', r.json().get('data').get('pointNum'), '积分')
         else:
             for j in range(4):
-                r = requests.post(url, data=data, headers=headers)
-                if r.json().get('data').get('pointFlag') == 0:
-                    print('今日次数已达上限')
-                else:
-                    print(r.json().get('data').get('pointName'), '获得', r.json().get('data').get('pointNum'), '积分')
-
+                try:
+                    r = requests.post(url, data=data, headers=headers)
+                    if r.json().get('data').get('pointFlag') == 0:
+                        print('今日次数已达上限')
+                    else:
+                        print(r.json().get('data').get('pointName'), '获得', r.json().get('data').get('pointNum'), '积分')
+                except Exception:
+                    continue
 
 def main():
     userid_list = os.getenv('skxw').split('\n')
