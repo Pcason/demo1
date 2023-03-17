@@ -2,7 +2,6 @@
 import os
 import time
 import notify
-
 import requests
 
 
