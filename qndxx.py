@@ -1,9 +1,9 @@
 # coding:utf-8
 """
-项目名称：学习通积分商城监控
-变量：xxtck。 抓cookie中stw，例如‘stw=xxxxxxx’
+项目名称：青年大学习积分商城监控
+变量：qndxxck。 抓cookie中stw，例如‘stw=xxxxxxx’
 定时：4小时一次，有可兑换商品时自动推送，没有则不推送。
-项目地址：https://github.com/Pcason/demo1/blob/main/xxtjk.py
+项目地址：https://github.com/Pcason/demo1/blob/main/qndxx.py
 """
 import os
 from datetime import datetime
@@ -44,11 +44,11 @@ def get_content(xxtck):
 
 
 def main():
-    ck_list = os.getenv('xxtck').split('\n')
-    for xxtck in ck_list:
-        content = get_content(xxtck)
+    ck_list = os.getenv('qndxxck').split('\n')
+    for qndxxck in ck_list:
+        content = get_content(qndxxck)
         if content != "":
-            notify.pushplus_bot('学习通积分商城库存监控', content)
+            notify.pushplus_bot('青年大学习积分商城库存监控', content)
         print('暂无可兑换商品！')
 
 
