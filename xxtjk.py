@@ -31,6 +31,8 @@ def get_content():
                 content += f'{title}:\n积分：{score}\n数量：{num}\n开始时间：{begin_time}\n\n'
         return content
     print(res.json().get('msg'))
+    content += res.json().get('msg')
+    return content
 
 
 def main():
