@@ -35,7 +35,10 @@ def get_content():
 
 def main():
     content = get_content()
-    notify.pushplus_bot('学习通积分商城库存监控', content)
+    if content != "":
+        notify.pushplus_bot('学习通积分商城库存监控', content)
+    print('暂无可兑换商品！')
+
 
 
 if __name__ == '__main__':
