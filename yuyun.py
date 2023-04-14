@@ -71,7 +71,7 @@ class RainYun():
             self.session.headers.update({
                 "X-CSRF-Token": res.cookies.get("X-CSRF-Token", "")
             })
-        else:
+        else: 
             self.logger.error(f"登录失败，响应信息：{res.text}")
 
     def signin(self) -> None:
@@ -132,6 +132,7 @@ class RainYun():
         with open(log_file, 'w', encoding='utf-8') as f:
             json.dump(previous_records, f, indent=4)
         self.logger.info('日志保存成功')
+
 
 
 if __name__ == '__main__':
