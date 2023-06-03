@@ -160,31 +160,10 @@ def a(bArr, k):
     return out_data.getvalue()
 
 
-def login():
-    """
-    暂时无法使用
-    Returns:
-    """
-    url = 'https://passport.tmuyun.com/web/oauth/credential_auth'
-    data = {
-        'client_id': '10032',
-        'password': encode_password('123456'),
-        'phone_number': 'phone'
-    }
-    headers = {
-        'User-Agent': 'ANDROID;13;10032;5.0.0;1.0;null;M2012K11AC',
-        'X-REQUEST-ID': '1612a329-cd31-4fab-a08d-57cd3db0082d',
-        'X-SIGNATURE': 'ffbc5dc4fb8e08cef7c549ebfb7f556a2998c1579809f6961cee749cd3176198',
-        'COOKIE': 'SESSION=NWE5MTEwYzMtYzc0Mi00NGQyLTgzNzMtMWM2YWMxYzY4NThh; Path=/; HttpOnly; SameSite=Lax'
-    }
-    res = requests.post(url, data=data, headers=headers)
-    print(res.json())
-
 
 def main():
     content = ''
     token_list = os.getenv('ZSOH').split('\n')
-    # token_list = ['0F715842F74CDE7E0F561B766603D951']
     for token in token_list:
         hai = ZhangShangOHai(token)
         hai.get_sign()
