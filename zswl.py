@@ -152,3 +152,6 @@ def main():
         phone, points = hai.get_username()
         content = content + f'用户{phone}的积分:{points}\n'
     notify.pushplus_bot('掌上温岭', content)
+    
+if __name__ == '__main__':
+    main()
