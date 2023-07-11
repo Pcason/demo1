@@ -6,6 +6,7 @@
 作者：cason
 项目地址：https://github.com/Pcason/demo1/blob/main/zsoh.py
 """
+import json
 import os
 import time
 import requests
@@ -16,6 +17,7 @@ import hashlib
 class ZhangShangOHai:
     def __init__(self, phone):
         self.session_id = self.login(phone)
+        # self.session_id = '64ad3924d63fea5c0aff8fb4'
 
     @staticmethod
     def signature(str, str2, str3, str4, str5):
@@ -117,12 +119,12 @@ class ZhangShangOHai:
         id_list = [x['id'] for x in article_list]
         return id_list[0:10]
 
-    def get_sign(self):
+    def get_sign(self, phone):
         url = 'https://vapp.tmuyun.com/api/user_mumber/sign'
         headers = self.get_headers(url)
         r = requests.get(url, headers=headers)
         if r.json().get('code') == 0:
-            print('签到成功！')
+            print(phone, '签到成功！')
         else:
             print('签到失败')
 
@@ -139,6 +141,7 @@ class ZhangShangOHai:
         登录
         Returns:
         """
+        url_1 = f'https://passport.tmuyun.com/web/account/check_phone_number?client_id=10032&phone_number={phone}'
         url = 'https://passport.tmuyun.com/web/oauth/credential_auth'
         data = {
             'client_id': '10032',
@@ -152,6 +155,7 @@ class ZhangShangOHai:
             'X-SIGNATURE': 'ffbc5dc4fb8e08cef7c549ebfb7f556a2998c1579809f6961cee749cd3176198',
             'COOKIE': 'SESSION=NWE5MTEwYzMtYzc0Mi00NGQyLTgzNzMtMWM2YWMxYzY4NThh; Path=/; HttpOnly; SameSite=Lax'
         }
+        res_0 = requests.get(url_1, headers=headers)
         res = requests.post(url, data=data, headers=headers)
         code = res.json().get("data").get("authorization_code").get("code")
         url = "https://vapp.tmuyun.com/api/zbtxz/login"
@@ -174,8 +178,26 @@ class ZhangShangOHai:
             'type': '-1'
         }
         r = requests.post(url, data=data, headers=headers)
+        # print(r.json())
         session_id = r.json().get('data').get('session').get('id')
         return session_id
+
+    def log_out(self, phone):
+        url = 'https://vapp.tmuyun.com/api/zbtxz/log_out'
+        headers = self.get_headers(url)
+        res = requests.post(url, headers=headers)
+        if res.status_code == 200:
+            print(f'{phone}退出登录')
+
+    def client_id(self):
+        url = 'https://vapp.tmuyun.com/api/account/client_id'
+        headers = self.get_headers(url)
+        data = {'client_id': 'cdc03a8036edaf6afaff31201333a877'}
+        requests.post(url, data=data, headers=headers)
+        url = 'https://vapp.tmuyun.com/api/app_feature_switch/list'
+        headers = self.get_headers(url)
+        res = requests.get(url, headers=headers)
+        # print(res.json())
 
 
 def main():
@@ -183,7 +205,8 @@ def main():
     phone_list = os.getenv('ZSOH').split('\n')
     for phone in phone_list:
         hai = ZhangShangOHai(phone)
-        hai.get_sign()
+        hai.client_id()
+        hai.get_sign(phone)
         hai.service()
         id_list = hai.get_title_list()
         hai.read(id_list)
@@ -191,6 +214,7 @@ def main():
         hai.comment(id_list)
         hai.like(id_list)
         phone, points = hai.get_username()
+        hai.log_out(phone)
         content = content + f'用户{phone}的积分:{points}\n'
     notify.pushplus_bot('掌上瓯海', content)
 
